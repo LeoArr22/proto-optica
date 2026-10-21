@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Óptica Solo Ojos{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .glass-border { border-color: rgba(226, 232, 240, 0.6); }
+        .sidebar-transition { transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex overflow-x-hidden">
+
+    <!-- Sidebar Lateral con ancho de cierre optimizado para el logo -->
+    <aside id="sidebar" class="w-56 sidebar-transition bg-slate-900 text-slate-300 min-h-screen p-3 flex flex-col justify-between fixed md:relative z-40 shadow-sm border-r glass-border">
+        <div>
+            <!-- Header del Sidebar: El logo abre y cierra sin deformarse -->
+            <div onclick="toggleSidebar()" class="flex items-center gap-2.5 px-2 py-2 mb-4 border-b border-slate-800/80 overflow-hidden cursor-pointer hover:bg-slate-800/50 rounded-lg transition group" title="Hacer clic para expandir / contraer menú">
+                <img src="/static/logo.png" alt="Solo Ojos" class="w-8 h-8 rounded-full object-cover border border-cyan-400/40 shadow-sm shrink-0 group-hover:border-cyan-400 transition">
+                <span class="sidebar-text font-bold text-sm text-white tracking-wide truncate">Solo Ojos</span>
+            </div>
+
+            <!-- Menú de Navegación -->
+            <nav class="space-y-1">
+                <a href="/" class="flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-slate-800/70 hover:text-cyan-400 transition font-medium text-xs">
+                    <i class="fa-solid fa-users text-cyan-400 w-4 text-center shrink-0"></i>
+                    <span class="sidebar-text truncate">Clientes</span>
+                </a>
+                
+                <a href="/clientes/nuevo" class="flex items-center gap-3 px-2.5 py-2 rounded-lg hover:bg-slate-800/70 hover:text-cyan-400 transition font-medium text-xs">
+                    <i class="fa-solid fa-user-plus text-sky-400 w-4 text-center shrink-0"></i>
+                    <span class="sidebar-text truncate">Nuevo Cliente</span>
+                </a>
+
+                <div class="pt-4 pb-1">
+                    <p class="sidebar-text text-[10px] font-bold uppercase tracking-wider text-slate-500 px-2.5 mb-1 truncate">Seguridad</p>
+                    <a href="/backup/download" class="flex items-center gap-3 px-2.5 py-2 rounded-lg bg-cyan-950/30 hover:bg-cyan-900/40 text-cyan-300 transition font-medium text-xs border border-cyan-500/20">
+                        <i class="fa-solid fa-shield-halved text-cyan-400 w-4 text-center shrink-0"></i>
+                        <span class="sidebar-text truncate">Descargar Backup</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Footer del Sidebar -->
+        <div class="border-t border-slate-800/80 pt-3 px-1.5 overflow-hidden">
+            <div class="sidebar-text text-[11px] text-slate-500 flex items-center justify-between truncate">
+                <span>Estado: <strong class="text-cyan-400 font-semibold">Online</strong></span>
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shrink-0"></span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contenido Principal -->
+    <div class="flex-1 flex flex-col min-w-0">
+        
+        <!-- Topbar Superior Limpio -->
+        <header class="bg-white/80 backdrop-blur-md border-b glass-border px-6 py-3 flex justify-between items-center sticky top-0 z-30 shadow-xs">
+            <div class="flex items-center gap-3">
+                <h1 class="text-sm font-bold text-slate-800 tracking-tight">{% block header_title %}Panel General{% endblock %}</h1>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="/backup/download" class="bg-cyan-600 hover:bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition shadow-xs">
+                    <i class="fa-solid fa-download text-[10px]"></i> Backup DB
+                </a>
+            </div>
+        </header>
+
+        <!-- Bloque de Contenido -->
+        <main class="p-6 flex-1">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Script ajustado a w-20 para cuidar las proporciones del logo -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const texts = document.querySelectorAll('.sidebar-text');
+            
+            if (sidebar.classList.contains('w-56')) {
+                sidebar.classList.remove('w-56');
+                sidebar.classList.add('w-20');
+                texts.forEach(el => {
+                    el.style.opacity = '0';
+                    setTimeout(() => el.style.display = 'none', 100);
+                });
+            } else {
+                sidebar.classList.remove('w-20');
+                sidebar.classList.add('w-56');
+                texts.forEach(el => {
+                    el.style.display = 'inline';
+                    setTimeout(() => el.style.opacity = '1', 50);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar Clientes - Óptica Solo Ojos{% endblock %}
+{% block header_title %}Directorio de Clientes{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6">
+
+    <!-- Card de Búsqueda -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border glass-border">
+        <form action="/" method="get" class="flex gap-3">
+            <div class="relative flex-1">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
+                <input type="text" name="q" value="{{ query or '' }}" placeholder="Buscar por Nombre, DNI o Teléfono..." 
+                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:bg-white transition">
+            </div>
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-medium px-5 py-2.5 rounded-lg text-xs transition shadow-xs">
+                Buscar
+            </button>
+            <a href="/clientes/nuevo" class="bg-slate-800 hover:bg-slate-700 text-white font-medium px-4 py-2.5 rounded-lg text-xs transition flex items-center gap-2 shadow-xs">
+                <i class="fa-solid fa-plus"></i> Nuevo
+            </a>
+        </form>
+    </div>
+
+    <!-- Tabla / Lista de Clientes -->
+    <div class="bg-white rounded-xl shadow-sm border glass-border overflow-hidden">
+        <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 border-b border-slate-200 uppercase font-semibold text-slate-500">
+                <tr>
+                    <th class="p-4">Cliente</th>
+                    <th class="p-4">DNI</th>
+                    <th class="p-4">Teléfono</th>
+                    <th class="p-4 text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for c in clientes %}
+                <tr class="hover:bg-slate-50/60 transition">
+                    <td class="p-4 font-semibold text-slate-800">
+                        <i class="fa-solid fa-user-circle text-slate-400 mr-2"></i> {{ c.nombre_completo }}
+                    </td>
+                    <td class="p-4 text-slate-600">{{ c.dni or '-' }}</td>
+                    <td class="p-4 text-slate-600">{{ c.telefono or '-' }}</td>
+                    <td class="p-4 text-center space-x-2">
+                        <a href="/cliente/{{ c.id }}" class="bg-cyan-50 text-cyan-700 hover:bg-cyan-100 px-3 py-1.5 rounded-lg font-semibold transition inline-flex items-center gap-1 border border-cyan-200">
+                            <i class="fa-solid fa-eye"></i> Ver Ficha
+                        </a>
+                        <!-- Aquí estaba apuntando a /receta/ -->
+                        <a href="/ficha/nueva/{{ c.id }}" class="bg-slate-100 text-slate-700 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-semibold transition inline-flex items-center gap-1 border border-slate-200">
+                            <i class="fa-solid fa-file-medical text-cyan-600"></i> + Ficha
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="p-8 text-center text-slate-500">
+                        No se encontraron clientes registrado{% if query %}s con "{{ query }}"{% endif %}.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}
